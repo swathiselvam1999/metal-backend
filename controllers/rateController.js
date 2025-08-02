@@ -29,29 +29,19 @@ const addRate = async(req, res)=>{
 };
 
 const getRates = async (req, res) => {
-  const { metal, purity, page = 1, limit = 5 } = req.query;
+  const { metal, purity } = req.query;
 
   const filter = {};
   if (metal) filter.metal = metal;
   if (purity) filter.purity = purity;
 
-  const skip = (page - 1) * limit;
-  const total = await Rate.countDocuments(filter);
-
-  const rates = await Rate.find(filter)
-    .sort({ date: -1 })
-    .skip(skip)
-    .limit(Number(limit));
-
-  res.json({
-    data: rates,
-    pagination: {
-      total,
-      page: Number(page),
-      limit: Number(limit),
-      pages: Math.ceil(total / limit),
-    },
-  });
+  try {
+    const rates = await Rate.find(filter).sort({ date: -1 });
+    res.json(rates);
+  } catch (err) {
+    console.error("Error fetching rates:", err);
+    res.status(500).json({ message: "Server error" });
+  }
 };
 
 
