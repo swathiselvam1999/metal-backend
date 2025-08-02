@@ -3,8 +3,10 @@ import Purity from "../models/puritySchema.js";
 const addPurity = async (req, res) => {
   const { metal, purity } = req.body;
   try {
-    if (!metal && purity) {
-      return res.status(400).json({ message: "please enter name" });
+    if (!metal) {
+      return res.status(400).json({ message: "please Choose metal" });
+    } else if(!purity){
+      return res.status(400).json({ message: "please Enter Purity" });
     }
     const newPurity = await Purity.create({ metal, purity });
     res.status(201).json(newPurity);
