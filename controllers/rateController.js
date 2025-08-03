@@ -19,10 +19,7 @@ const addRate = async(req, res)=>{
     const {metal, purity, rate, date} = req.body;
     try{
         const newRate = await Rate.create({metal, purity, rate, date});
-        res.status(201).json(
-            newRate,
-            {message: "New Rate Added Successfuly"}
-        );
+        res.status(201).json(newRate);
     }catch (err) {
     res.status(400).json({ error: err.message });
   }
